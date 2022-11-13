@@ -37,7 +37,7 @@ export class Canvas extends fabric.Canvas {
     }
 
     lockImage() {
-        this.customBackgroundImage.sendToBack()
+        this.sendToBack(this.customBackgroundImage)
         this.customBackgroundImage.hasControls = false
         this.customBackgroundImage.selectable = false
         this.customBackgroundImage.hoverCursor = 'default'

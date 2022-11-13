@@ -82,24 +82,25 @@ describe('Canvas', () => {
             const obj = new fabric.Object()
         
             // Act
-            canvas.setImage = obj
+            canvas.setImage(obj)
         
             // Assert
-            assert.are.equals(canvas.getImage(), obj)
+            assert.equal(canvas.getImage(), obj)
         });
     });
 
     describe('lockImage', () => {
         it('Should set image hasControls attribute to false.', () => {
             // Arrange
-            const canvas = new Canvas('example2D')
-            canvas.setImage(new fabric.Object())
+            const c = new Canvas('example2D')
+            const obj = new fabric.Object()
+            c.setImage(obj)
         
             // Act
-            canvas.lockImage()
+            c.lockImage()
         
             // Assert
-            assert.isFalse(canvas.customBackgroundImage.hasControls)
+            assert.isFalse(c.customBackgroundImage.hasControls)
         });
     });
 
