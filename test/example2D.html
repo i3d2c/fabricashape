@@ -33,7 +33,7 @@
                                 <input id="scaleValue" type="text" class="form-control" aria-label="size" onChange="updateScaleValue(this)">
                                 <div class="input-group-append">
                                     <span class="input-group-text">m</span>
-                                    <a class="input-group-text btn" onClick="addArrowLine({left: 50, top: 40, width: 200, height: 30, fill: 'blue'})">+</a>
+                                    <a class="input-group-text btn" onClick="addScale()">+</a>
                                 </div>
                             </li>
                             <li class="nav-item">-</li>
@@ -286,15 +286,11 @@
                 canvas.renderAll()
             }
 
-            function addArrowLine(options) {
+            function addScale() {
                 const scaleValueObject = document.getElementById("scaleValue")
                 const scaleValue = scaleValueObject.value
 
-                options["text"] = scaleValue
-                const arrowline = new fabricashape.Arrowline(options)
-
-                canvas.add(arrowline)
-                canvas.setScale({shape: arrowline, value: scaleValue})
+                canvas.addScale(scaleValue)
             }
 
             function updateScaleValue(item) {

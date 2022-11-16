@@ -1,5 +1,6 @@
 import {fabric} from 'fabric'
 import {Line} from './line'
+import {Arrowline} from './arrowline'
 
 export class Canvas extends fabric.Canvas {
 
@@ -85,6 +86,19 @@ export class Canvas extends fabric.Canvas {
 
     lockScale() {
         this.scale.shape.hasControls = false
+    }
+
+    addScale(value) {
+        if (this.getScale().shape !== null) {
+            throw new ReferenceError('Scale has already been set.')
+        }
+        const shape = new Arrowline({left: 50, top: 40, width: 200, height: 30, fill: 'blue', text: value.toString()})
+
+        this.add(shape)
+        this.setScale({
+            shape,
+            value
+        })
     }
 
     remove(objects) {

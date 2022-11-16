@@ -71,6 +71,32 @@ describe('Canvas', () => {
         });
     });
 
+    describe('addScale', () => {
+        it('Should add a new Arrowline to the canvas with given text.', () => {
+            // Arrange
+            const canvas = new Canvas('example2D')
+            const value = 13.89
+        
+            // Act
+            canvas.addScale(value)
+        
+            // Assert
+            assert.equal(canvas.scale.shape.type, 'arrowline')
+            assert.equal(canvas.scale.value, value)
+        });
+
+        it('Should throw exception if a scale shape already exists.', () => {
+            // Arrange
+            const canvas = new Canvas('example2D')
+        
+            // Act
+            canvas.addScale(1)
+
+            // Assert
+            assert.throws(() => {canvas.addScale(1)}, ReferenceError, 'Scale has already been set.');
+        });
+    });
+
     describe('setImage', () => {
         it('Should set image of the instance to given instance.', () => {
             // Arrange
