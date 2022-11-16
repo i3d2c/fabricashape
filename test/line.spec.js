@@ -10,7 +10,7 @@ describe('Line', () => {
 
     beforeEach(() => {
         canvas = new Canvas('myId')
-        line = new Line({top: 1, left: 2, width: 3, height: 4, angle: 5})
+        line = new Line({mTop: 1, mLeft: 2, mWidth: 3, mStroke: 4, angle: 5})
     })
 
     describe('constructor', () => {
@@ -19,6 +19,16 @@ describe('Line', () => {
             // Act
             // Assert
             assert.equal(line.type, 'line')
+        });
+
+        it('Should save metric values in instance.', () => {
+            // Arrange
+            // Act
+            // Assert
+            assert.equal(line.mTop, 1)
+            assert.equal(line.mLeft, 2)
+            assert.equal(line.mWidth, 3)
+            assert.equal(line.mStroke, 4)
         });
 
         it('Should set fill of main line to transparent.', () => {

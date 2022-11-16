@@ -77,7 +77,9 @@ export class Canvas extends fabric.Canvas {
         }
         if (scaleDefinition.value) {
             this.scale.value = scaleDefinition.value
+            this.scale.shape.setText(scaleDefinition.value.toString())
         }
+        this._updateShapesToScale()
     }
 
     getScale() {
@@ -94,11 +96,26 @@ export class Canvas extends fabric.Canvas {
         }
         const shape = new Arrowline({left: 50, top: 40, width: 200, height: 30, fill: 'blue', text: value.toString()})
 
+        shape.on('scaling', (e) => {
+            this._updateShapesToScale()
+        });
+
         this.add(shape)
         this.setScale({
             shape,
             value
         })
+    }
+
+    addLine(options) {
+        if (this.scale.value === null || this.scale.shape === null) {
+            throw new ReferenceError('Scale has not been set.')
+        }
+        const line = this.createScaledLine(options)
+
+        this.add(line)
+        this.renderAll()
+        return line
     }
 
     remove(objects) {
@@ -130,12 +147,23 @@ export class Canvas extends fabric.Canvas {
     createScaledLine(options) {
         const scale = (this.scale.shape.width * this.scale.shape.scaleX) / this.scale.value
 
-        options.top = options.top * scale
-        options.left = options.left * scale
-        options.width = options.width * scale
-        options.height = options.stroke * scale
+        options.top = options.mTop * scale
+        options.left = options.mLeft * scale
+        options.width = options.mWidth * scale
+        options.height = options.mStroke * scale
 
         return new Line(options)
+    }
+
+    _updateShapesToScale() {
+        const scale = (this.scale.shape.width * this.scale.shape.scaleX) / this.scale.value
+
+        this.forEachObject((shape, index, objects) => {
+            if (shape.type === 'line') {
+                shape.height = shape.mStroke * scale
+                shape.fire('scaling')
+            }
+        })
     }
 
 }

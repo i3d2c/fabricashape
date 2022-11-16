@@ -48,7 +48,7 @@
                                 <input id="linelenght" type="text" class="form-control" aria-label="size" placeholder="longueur">
                                 <div class="input-group-append">
                                     <span class="input-group-text">m</span>
-                                    <a class="input-group-text btn" onClick="addLine({left: 1, top: 2, width: document.getElementById('linelenght').value, stroke: document.getElementById('linestroke').value})">+</a>
+                                    <a class="input-group-text btn" onClick="addLine({mLeft: 1, mTop: 2, mWidth: document.getElementById('linelenght').value, mStroke: document.getElementById('linestroke').value})">+</a>
                                 </div>
                             </li>
                             <li class="nav-item">-</li>
@@ -280,10 +280,7 @@
                     selectedColor = selectObject.options[selectObject.selectedIndex].style.backgroundColor
 
                 options["fill"] = selectedColor
-                const line = canvas.createScaledLine(options)
-                canvas.add(line)
-                line.setText("1")
-                canvas.renderAll()
+                canvas.addLine(options)
             }
 
             function addScale() {
@@ -294,8 +291,7 @@
             }
 
             function updateScaleValue(item) {
-                const arrowline = canvas.getScale().shape
-                arrowline.setText(item.value)
+                canvas.setScale({value: item.value})
                 canvas.renderAll()
             }
 

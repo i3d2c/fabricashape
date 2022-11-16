@@ -97,6 +97,100 @@ describe('Canvas', () => {
         });
     });
 
+    describe('onScaleChange', () => {
+        describe.only('shape', () => {
+            it('Should update all lines width.', () => {
+                // Arrange
+                const canvas = new Canvas('example2D')
+                canvas.addScale(10)
+                const line = canvas.addLine({mTop: 0, mLeft: 0, mStroke: 10, mWidth: 2})
+
+                // Act
+                canvas.getScale().shape.scaleToWidth(canvas.getScale().shape.width * 2)
+                canvas.getScale().shape.fire('scaling')
+
+                // Assert
+                assert.equal(line.height, 400)
+            });
+        });
+
+        describe.only('value', () => {
+            it('Should update all lines width.', () => {
+                // Arrange
+                const canvas = new Canvas('example2D')
+                canvas.addScale(10)
+                const line = canvas.addLine({mTop: 0, mLeft: 0, mStroke: 10, mWidth: 2})
+
+                // Act
+                canvas.setScale({value: canvas.getScale().value * 2})
+
+                // Assert
+                assert.equal(line.height, 100)
+            });
+
+            it('Should update scale text.', () => {
+                // Arrange
+                const canvas = new Canvas('example2D')
+                canvas.addScale(10)
+
+                // Act
+                canvas.setScale({value: 30})
+
+                // Assert
+                assert.equal(canvas.getScale().shape.text.text, '30m')
+            });
+        });
+    });
+
+    describe('addLine', () => {
+        it('Should add a line to the canvas.', () => {
+            // Arrange
+            const canvas = new Canvas('example2D')
+            canvas.addScale(1)
+        
+            // Act
+            canvas.addLine({mTop: 0, mLeft: 0, mWidth: 1, mStroke: 1})
+        
+            // Assert
+            assert.equal(canvas.size(), 5+3) // 5=scale shape, 3=line(body, text & group)
+        });
+
+        it('Should return the created line.', () => {
+            // Arrange
+            const canvas = new Canvas('example2D')
+            canvas.addScale(1)
+        
+            // Act
+            const result = canvas.addLine({mTop: 0, mLeft: 0, mWidth: 1, mStroke: 1})
+        
+            // Assert
+            assert.equal(result.type, 'line')
+        });
+
+        it('Should add multiple lines too.', () => {
+            // Arrange
+            const canvas = new Canvas('example2D')
+            canvas.addScale(1)
+        
+            // Act
+            canvas.addLine({mTop: 0, mLeft: 0, mWidth: 1, mStroke: 1})
+            canvas.addLine({mTop: 0, mLeft: 0, mWidth: 1, mStroke: 1})
+            canvas.addLine({mTop: 0, mLeft: 0, mWidth: 1, mStroke: 1})
+        
+            // Assert
+            assert.equal(canvas.size(), 5+3*3) // 5=scale shape, 3=line(body, text & group)
+        });
+
+        it('Should throw exception if scale is not set.', () => {
+            // Arrange
+            const canvas = new Canvas('example2D')
+        
+            // Act
+            // Assert
+            assert.throws(() => {canvas.addLine()}, ReferenceError, 'Scale has not been set.');
+        });
+    });
+
     describe('setImage', () => {
         it('Should set image of the instance to given instance.', () => {
             // Arrange
@@ -135,7 +229,7 @@ describe('Canvas', () => {
             const shape = new fabric.Rect({width: 10, height: 10})
             const value = 12.5
             canvas.setScale({shape, value})
-            const createdLine = canvas.createScaledLine({top: 1, left: 2, width: 3, stroke: 0.4})
+            const createdLine = canvas.createScaledLine({mTop: 1, mLeft: 2, mWidth: 3, mStroke: 0.4})
         
             // Assert
             const scale = 10 / 12.5 // shape.width / scale value
@@ -154,7 +248,7 @@ describe('Canvas', () => {
             shape.scaleX = 3
             const value = 12.5
             canvas.setScale({shape, value})
-            const createdLine = canvas.createScaledLine({top: 1, left: 2, width: 3, stroke: 0.4})
+            const createdLine = canvas.createScaledLine({mTop: 1, mLeft: 2, mWidth: 3, mStroke: 0.4})
         
             // Assert
             const scale = (3 * 10) / 12.5 // shape.width / scale value
