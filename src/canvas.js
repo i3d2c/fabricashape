@@ -59,7 +59,7 @@ export class Canvas extends fabric.Canvas {
                 obj.top = Math.max(obj.top, obj.top - obj.getBoundingRect().top);
                 obj.left = Math.max(obj.left, obj.left - obj.getBoundingRect().left);
             }
-            // bot-right corner
+            // bottom-right corner
             if (obj.getBoundingRect().top + obj.getBoundingRect().height > this.height ||
                     obj.getBoundingRect().left + obj.getBoundingRect().width > this.width) {
                 obj.top = Math.min(obj.top, this.height - obj.getBoundingRect().height +
@@ -73,7 +73,6 @@ export class Canvas extends fabric.Canvas {
     setScale(scaleDefinition) {
         if (scaleDefinition.shape) {
             this.scale.shape = scaleDefinition.shape
-            this.scale.shape.hasControls = false
         }
         if (scaleDefinition.value) {
             this.scale.value = scaleDefinition.value
@@ -105,9 +104,7 @@ export class Canvas extends fabric.Canvas {
     }
 
     clearScale() {
-        console.log('clear scales ujbjg')
         if (this.scale.shape) {
-            console.log('clear scale')
             this.clear()
             this.remove(this.scale.shape)
         }

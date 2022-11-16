@@ -28,14 +28,7 @@ export const Arrowline = fabric.util.createClass(Line, {
             height = this.height * this.scaleY,
             width = this.width * this.scaleX,
             cosTeta = Math.cos(this.angle * degreesToRadiansRatio),
-            sinTeta = Math.sin(this.angle * degreesToRadiansRatio),
-            boundingRect = this.getBoundingRect()
-
-        this.text.set({
-            top: boundingRect.top + 0.5 * (boundingRect.height - this.text.height),
-            left: boundingRect.left + 0.5 * (boundingRect.width - this.text.width),
-            fontSize: 18
-        })
+            sinTeta = Math.sin(this.angle * degreesToRadiansRatio)
 
         this.body.set({
             top: this.top + height * sinTeta + (height / 4) * cosTeta,
@@ -59,6 +52,14 @@ export const Arrowline = fabric.util.createClass(Line, {
             width: height,
             height: height,
             angle: this.angle + 90
+        })
+
+        const boundingRect = this.getBoundingRect(false, true)
+
+        this.text.set({
+            top: boundingRect.top + 0.5 * (boundingRect.height - this.text.height),
+            left: boundingRect.left + 0.5 * (boundingRect.width - this.text.width),
+            fontSize: 18
         })
     }
 

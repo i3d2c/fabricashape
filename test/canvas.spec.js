@@ -14,21 +14,7 @@ describe('Canvas', () => {
     });
 
     describe('setScale', () => {
-        it('Should save given shape and given scale value.', () => {
-            // Arrange
-            const canvas = new Canvas('example2D')
-            const shape = new fabric.Rect({width: 10, height: 10})
-            const value = 13.89
-        
-            // Act
-            const result = canvas.setScale({shape, value})
-        
-            // Assert
-            assert.equal(canvas.scale.shape, shape)
-            assert.equal(canvas.scale.value, value)
-        });
-
-        it('Should save only shape if no value is given.', () => {
+        it('Should set given shape and given scale value as scale.', () => {
             // Arrange
             const canvas = new Canvas('example2D')
             const shape = new fabric.Rect({width: 10, height: 10})
@@ -36,25 +22,35 @@ describe('Canvas', () => {
         
             // Act
             canvas.setScale({shape, value})
-            const result = canvas.setScale({shape})
         
             // Assert
             assert.equal(canvas.scale.shape, shape)
             assert.equal(canvas.scale.value, value)
         });
 
-        it('Should save only value if no shape is given.', () => {
+        it('Should set only shape if no value is given.', () => {
             // Arrange
             const canvas = new Canvas('example2D')
-            const shape = new fabric.Rect({width: 10, height: 10})
-            const value = 13.89
+            const shape = new fabric.Object()
         
             // Act
-            canvas.setScale({shape, value})
-            const result = canvas.setScale({value})
+            canvas.setScale({shape})
         
             // Assert
             assert.equal(canvas.scale.shape, shape)
+            assert.equal(canvas.scale.value, null)
+        });
+
+        it('Should set only value if no shape is given.', () => {
+            // Arrange
+            const canvas = new Canvas('example2D')
+            const value = 13.89
+        
+            // Act
+            canvas.setScale({value})
+        
+            // Assert
+            assert.equal(canvas.scale.shape, null)
             assert.equal(canvas.scale.value, value)
         });
     });
@@ -63,10 +59,10 @@ describe('Canvas', () => {
         it('Should set scale shape hasControls attribute to false.', () => {
             // Arrange
             const canvas = new Canvas('example2D')
+            const shape = new fabric.Object()
+            const value = 13.89
         
             // Act
-            const shape = new fabric.Rect({width: 10, height: 10})
-            const value = 13.89
             canvas.setScale({shape, value})
             canvas.lockScale()
         
@@ -143,7 +139,5 @@ describe('Canvas', () => {
 
         });
     });
-
-    describe
 
 });
