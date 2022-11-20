@@ -77,9 +77,13 @@ export class Canvas extends fabric.Canvas {
         }
         if (scaleDefinition.value) {
             this.scale.value = scaleDefinition.value
-            this.scale.shape.setText(scaleDefinition.value.toString())
+            if (this.scale.shape) {
+                this.scale.shape.setText(scaleDefinition.value.toString())
+            }
         }
-        this._updateShapesToScale()
+        if (this.scale.value && this.scale.shape) {
+            this._updateShapesToScale()
+        }
     }
 
     getScale() {
@@ -94,7 +98,8 @@ export class Canvas extends fabric.Canvas {
         if (this.getScale().shape !== null) {
             throw new ReferenceError('Scale has already been set.')
         }
-        const shape = new Arrowline({left: 50, top: 40, width: 200, height: 30, fill: 'blue', text: value.toString()})
+        const shape = new Arrowline({left: 50, top: 40, width: 200, height: 30, bodyFill: 'blue',
+            bodyText: value.toString()})
 
         shape.on('scaling', (e) => {
             this._updateShapesToScale()
@@ -118,20 +123,16 @@ export class Canvas extends fabric.Canvas {
         return line
     }
 
-    remove(objects) {
-        console.log('biche')
-        if (Array.isArray(objects)) {
-            objects.forEach((object) => {
-                if (object.hasOwnProperty('clear')) {
-                    object.clear()
-                }
-            })
-        } else {
-            if (objects.hasOwnProperty('clear')) {
-                objects.clear()
-            }
+    removeShapes(objects) {
+        if (!Array.isArray(objects)) {
+            objects = [objects]
         }
-        this.callSuper('remove', objects)
+        objects.forEach((o) => {
+            o.components.forEach((c) => {
+                this.remove(c)
+            })
+            this.remove(o)
+        })
     }
 
     clearScale() {
@@ -153,6 +154,12 @@ export class Canvas extends fabric.Canvas {
         options.height = options.mStroke * scale
 
         return new Line(options)
+    }
+
+    removeActiveShapes() {
+        const activeShapes = this.getActiveObject()
+
+        this.removeShapes(activeShapes)
     }
 
     _updateShapesToScale() {

@@ -107,10 +107,6 @@ export const Line = fabric.util.createClass(fabric.Rect, {
         this.callSuper('_render', ctx)
     },
 
-    clear: function () {
-        this.canvas.remove(this.components)
-    },
-
     toObject: function () {
         return fabric.util.object.extend(this.callSuper('toObject'), {
             bodyFill: this.get('bodyFill'),

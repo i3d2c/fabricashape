@@ -1,7 +1,7 @@
 import {fabric} from 'fabric'
 import {assert} from 'chai'
 
-import {Canvas} from '../lib/fabricashape.js'
+import {Canvas, Arrowline} from '../lib/fabricashape.js'
 
 describe('Canvas', () => {
 
@@ -17,7 +17,8 @@ describe('Canvas', () => {
         it('Should set given shape and given scale value as scale.', () => {
             // Arrange
             const canvas = new Canvas('example2D')
-            const shape = new fabric.Rect({width: 10, height: 10})
+            const shape = new Arrowline({left: 50, top: 40, width: 200, height: 30, bodyFill: 'blue', bodyText: 'test'})
+            canvas.add(shape)
             const value = 13.89
         
             // Act
@@ -63,7 +64,7 @@ describe('Canvas', () => {
             const value = 13.89
         
             // Act
-            canvas.setScale({shape, value})
+            canvas.addScale(value)
             canvas.lockScale()
         
             // Assert
@@ -98,7 +99,7 @@ describe('Canvas', () => {
     });
 
     describe('onScaleChange', () => {
-        describe.only('shape', () => {
+        describe('shape', () => {
             it('Should update all lines width.', () => {
                 // Arrange
                 const canvas = new Canvas('example2D')
@@ -114,7 +115,7 @@ describe('Canvas', () => {
             });
         });
 
-        describe.only('value', () => {
+        describe('value', () => {
             it('Should update all lines width.', () => {
                 // Arrange
                 const canvas = new Canvas('example2D')
@@ -226,13 +227,12 @@ describe('Canvas', () => {
             const canvas = new Canvas('example2D')
         
             // Act
-            const shape = new fabric.Rect({width: 10, height: 10})
             const value = 12.5
-            canvas.setScale({shape, value})
+            canvas.addScale(value)
             const createdLine = canvas.createScaledLine({mTop: 1, mLeft: 2, mWidth: 3, mStroke: 0.4})
         
             // Assert
-            const scale = 10 / 12.5 // shape.width / scale value
+            const scale = 200 / 12.5 // shape.width / scale value
             assert.equal(createdLine.top, 1 * scale, "top is not ok")
             assert.equal(createdLine.left, 2 * scale, "left is not ok")
             assert.equal(createdLine.width, 3 * scale, "width is not ok")
@@ -244,19 +244,34 @@ describe('Canvas', () => {
             const canvas = new Canvas('example2D')
         
             // Act
-            const shape = new fabric.Rect({width: 10, height: 10})
-            shape.scaleX = 3
             const value = 12.5
-            canvas.setScale({shape, value})
+            canvas.addScale(value)
             const createdLine = canvas.createScaledLine({mTop: 1, mLeft: 2, mWidth: 3, mStroke: 0.4})
         
             // Assert
-            const scale = (3 * 10) / 12.5 // shape.width / scale value
+            const scale = 200 / 12.5 // shape.width / scale value
             assert.equal(createdLine.top, 1 * scale, "top is not ok")
             assert.equal(createdLine.left, 2 * scale, "left is not ok")
             assert.equal(createdLine.width, 3 * scale, "width is not ok")
             assert.equal(createdLine.height, 0.4 * scale, "height is not ok")
+        });
+    });
 
+    describe('removeSelection', () => {
+        it('Should remove every selected shapes.', () => {
+            // Arrange
+            const canvas = new Canvas('example2D')
+            canvas.addScale(1)
+            canvas.addLine({mTop: 0, mLeft: 0, mWidth: 1, mStroke: 1})
+            canvas.addLine({mTop: 0, mLeft: 0, mWidth: 1, mStroke: 1})
+            const line = canvas.addLine({mTop: 0, mLeft: 0, mWidth: 1, mStroke: 1})
+            canvas.setActiveObject(line)
+
+            // Act
+            canvas.removeActiveShapes()
+        
+            // Assert
+            assert.equal(canvas.size(), 5+2*3) // 5=scale shape, 3=line(body, text & group)
         });
     });
 
